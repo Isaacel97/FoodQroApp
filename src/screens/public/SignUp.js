@@ -3,11 +3,9 @@ import { View, Text } from 'react-native'
 import { Button, TextInput } from 'react-native-paper'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import Toast from 'react-native-root-toast'
 import { globalStyles } from '../../utils/styles'
 import colors from '../../utils/styles/colors'
-import { auth } from '../../api/firebaseConfig'
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { validAuth } from '../../api/authApi'
 
 const SignUp = (props) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,25 +24,9 @@ const SignUp = (props) => {
       password: Yup.string().required('El password es obligatorio').min(8, 'El password debe tener al menos 8 caracteres'),
       confirmPassword: Yup.string().required('El password es obligatorio').oneOf([Yup.ref('password')], 'Las contraseñas no coinciden')
     }),
-    onSubmit: (formData) => {
-      console.log(formData)
-      createUserWithEmailAndPassword(auth, formData.email, formData.password)
-      .then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
-        Toast.show('Usuario creado correctamente', {
-          position: Toast.positions.CENTER,
-        })
-        console.log(user);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log('#ERROR: ', errorCode, errorMessage);
-        Toast.show(errorMessage, {
-          position: Toast.positions.CENTER,
-        })
-      });
+    onSubmit: async(formData) => {
+      const res = await validAuth(formData.email, formData.password, 'signup')
+      if (res) setIsLogin(true)
     }
   })
   return (

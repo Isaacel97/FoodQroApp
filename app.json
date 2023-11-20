@@ -16,14 +16,16 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.isacel97.FoodQroApp"
+      "bundleIdentifier": "com.isacel97.FoodQroApp",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.isacel97.FoodQroApp"
+      "package": "com.isacel97.FoodQroApp",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -32,6 +34,7 @@
       "eas": {
         "projectId": "541831d9-ff80-4c28-b44d-e151d8be559c"
       }
-    }
+    },
+    "plugins": ["@react-native-google-signin/google-signin"]
   }
 }

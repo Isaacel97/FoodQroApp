@@ -3,14 +3,14 @@ import { View, Text } from 'react-native'
 import { Button, TextInput } from 'react-native-paper'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import Toast from 'react-native-root-toast'
+import { validAuth } from '../../api/authApi'
 import { globalStyles } from '../../utils/styles'
 import colors from '../../utils/styles/colors'
 
 const Login = (props) => {
     const { setIsLogin } = props;
-    const [showPassword, setShowPassword] = useState(false)
-
+    const [showPassword, setShowPassword] = useState(false);
+    
     const formik = useFormik({
         initialValues: {
         email: '',
@@ -21,7 +21,8 @@ const Login = (props) => {
         password: Yup.string().required('El password es obligatorio'),
         }),
         onSubmit: (formData) => {
-            console.log(formData)
+           const res = validAuth(formData.email, formData.password, 'login') 
+
         }
     })
   return (
