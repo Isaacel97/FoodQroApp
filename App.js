@@ -31,11 +31,11 @@ export default function App() {
 	});
   
   return !fontsLoaded ? (null) : (
-
+    <AuthProvider>
       <PaperProvider theme={theme}>
-        <StatusBar style='light' backgroundColor={colors.primary}/>
+        <StatusBar style='dark' backgroundColor={colors.primary}/>
         <RootNavigation />
       </PaperProvider>
-
+    </AuthProvider>
   );
 }

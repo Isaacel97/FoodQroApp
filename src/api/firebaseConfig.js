@@ -12,7 +12,7 @@ import {
 } from "@env"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-console.log("api firebase",FIREBASE_API_KEY);
+
 const firebaseConfig = {
   apiKey:FIREBASE_API_KEY,
   authDomain: FIREBASE_AUTH_DOMAIN,

@@ -5,7 +5,7 @@ import {
     signInWithEmailAndPassword,
     signOut
 } from "firebase/auth";
-import Toast from 'react-native-root-toast'
+import Toast from 'react-native-root-toast';
 
 const callToast = (message) => {
     Toast.show(message, {
@@ -31,9 +31,8 @@ export const validAuth = async(email, pass, type) => {
             userCredential = await createUserWithEmailAndPassword(auth, email, pass);
             message = 'Usuario creado correctamente';
         }
-        const user = userCredential.user;
         callToast(message);
-        return user;
+        return userCredential.user;
     } catch (error) {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -45,7 +44,7 @@ export const validAuth = async(email, pass, type) => {
             'auth/user-not-found': 'El usuario no existe',
             'auth/weak-password': 'La contraseña es muy debil',
             'auth/too-many-requests': 'Demasiadas solicitudes, intenta mas tarde',
-            'auth/operation-not-allowed': 'Operacion no permitida',
+            'auth/operation-not-allowed': 'Operación no permitida',
             'auth/network-request-failed': 'Error de red',
         };
         const message = errorMessages[errorCode] || `Error desconocido: ${errorCode} - ${errorMessage}`;

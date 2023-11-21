@@ -10,8 +10,8 @@ const AuthScreen = () => {
 
   return (
     <View style={styles.container}>
-        <Image source={logo} alt='Logo' resizeMode='center' style={styles.image}/>
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{flex: 1}}>
+        <Image source={logo} alt='Logo' style={styles.image}/>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             {isLogin ? <Login setIsLogin={setIsLogin} /> : <SignUp setIsLogin={setIsLogin} />}
         </KeyboardAvoidingView>
     </View>

@@ -6,6 +6,7 @@ import * as Yup from 'yup'
 import { globalStyles } from '../../utils/styles'
 import colors from '../../utils/styles/colors'
 import { validAuth } from '../../api/authApi'
+import Checkbox from 'expo-checkbox';
 
 const SignUp = (props) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,15 +15,15 @@ const SignUp = (props) => {
   const formik = useFormik({
     initialValues: {
       email: '',
-      username: '',
       password: '',
       confirmPassword: '',
+      checkTerms: false
     },
     validationSchema: Yup.object({
       email: Yup.string().email('Email invalido').required('El email es obligatorio'),
-      username: Yup.string().required('El username es obligatorio').min(4, 'El username debe tener al menos 4 caracteres'),
       password: Yup.string().required('El password es obligatorio').min(8, 'El password debe tener al menos 8 caracteres'),
-      confirmPassword: Yup.string().required('El password es obligatorio').oneOf([Yup.ref('password')], 'Las contraseñas no coinciden')
+      confirmPassword: Yup.string().required('El password es obligatorio').oneOf([Yup.ref('password')], 'Las contraseñas no coinciden'),
+      checkTerms: Yup.boolean().oneOf([true], 'Debes aceptar los terminos y condiciones')
     }),
     onSubmit: async(formData) => {
       const res = await validAuth(formData.email, formData.password, 'signup')
@@ -36,19 +37,14 @@ const SignUp = (props) => {
         style={globalStyles.form.input}
         onChangeText={(text) => formik.setFieldValue('email', text)}
         value={formik.values.email}
-        error={formik.errors.email} />
-      {formik.errors.email ? (
+        error={formik.errors.email} 
+        left={
+          <TextInput.Icon 
+            icon='email'
+            color={colors.primary} />
+        }/>
+      {formik.errors.email && formik.touched.email ? (
         <Text style={globalStyles.form.errorText}>{formik.errors.email}</Text>
-      ) : null}
-
-      <TextInput
-        label='Username'
-        style={globalStyles.form.input}
-        onChangeText={(text) => formik.setFieldValue('username', text)}
-        value={formik.values.username}
-        error={formik.errors.username} />
-      {formik.errors.username ? (
-        <Text style={globalStyles.form.errorText}>{formik.errors.username}</Text>
       ) : null}
 
       <TextInput
@@ -62,8 +58,13 @@ const SignUp = (props) => {
           <TextInput.Icon
             icon={showPassword ? 'eye-off' : 'eye'}
             onPress={() => setShowPassword(!showPassword)} />
-        } />
-      {formik.errors.password ? (
+        } 
+        left={
+          <TextInput.Icon 
+            icon='lock'
+            color='black'/>
+        }/>
+      {formik.errors.password && formik.touched.password ? (
         <Text style={globalStyles.form.errorText}>{formik.errors.password}</Text>
       ) : null}
       
@@ -78,16 +79,34 @@ const SignUp = (props) => {
           <TextInput.Icon
             icon={showConfirmPassword ? 'eye-off' : 'eye'}
             onPress={() => setShowConfirmPassword(!showConfirmPassword)} />
-        } />
-      {formik.errors.confirmPassword ? (
+        } 
+        left={
+          <TextInput.Icon 
+            icon='lock'
+            color={colors.primary}/>
+        }/>
+      {formik.errors.confirmPassword && formik.touched.confirmPassword ? (
         <Text style={globalStyles.form.errorText}>{formik.errors.confirmPassword}</Text>
+      ) : null}
+
+      <View style={globalStyles.form.checkBox}>
+        <Checkbox
+          value={formik.values.checkTerms}
+          onValueChange={(value) => formik.setFieldValue('checkTerms', value)}
+          color={formik.values.checkTerms ? colors.primary : undefined}
+        />
+        <Text style={globalStyles.form.textCheckBox}>Acepto los terminos y condiciones</Text>
+      </View>
+      {formik.errors.checkTerms ? (
+        <Text style={globalStyles.form.errorText}>{formik.errors.checkTerms}</Text>
       ) : null}
 
       <Button
         mode='contained'
         style={globalStyles.form.buttonSubmit}
         labelStyle={{ color: 'white' }}
-        onPress={formik.handleSubmit}>
+        onPress={formik.handleSubmit}
+        loading={formik.isSubmitting}>
         Registrarme
       </Button>
 
@@ -96,11 +115,7 @@ const SignUp = (props) => {
         <Button
           mode='text'
           style={globalStyles.form.buttonText}
-          labelStyle={{
-            color: colors.secondary,
-            textDecorationLine: 'underline',
-            fontSize: 12,
-          }}
+          labelStyle={globalStyles.form.labelButton}
           onPress={() => setIsLogin(true)}>
           Inicia sesión
         </Button>

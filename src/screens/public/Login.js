@@ -20,9 +20,9 @@ const Login = (props) => {
         email: Yup.string().email('Email invalido').required('El email es obligatorio'),
         password: Yup.string().required('El password es obligatorio'),
         }),
-        onSubmit: (formData) => {
-           const res = validAuth(formData.email, formData.password, 'login') 
-
+        onSubmit: async(formData) => {
+           const res = await validAuth(formData.email, formData.password, 'login');
+           console.log('RES LOGIN::: ',res.stsTokenManager.accessToken);
         }
     })
   return (
@@ -32,7 +32,12 @@ const Login = (props) => {
             style={globalStyles.form.input}
             onChangeText={(text) => formik.setFieldValue('email', text)}
             value={formik.values.email}
-            error={formik.errors.email}/>
+            error={formik.errors.email}
+            left={
+                <TextInput.Icon 
+                  icon='email'
+                  color={colors.primary} />
+            }/>
         {formik.errors.email ? (
             <Text style={globalStyles.form.errorText}>{formik.errors.email}</Text>
         ) : null}
@@ -48,6 +53,11 @@ const Login = (props) => {
                 <TextInput.Icon 
                 icon={showPassword ? 'eye-off' : 'eye'} 
                 onPress={() => setShowPassword(!showPassword)}/>
+            }
+            left={
+                <TextInput.Icon 
+                  icon='lock'
+                  color='black'/>
             }/>
         {formik.errors.password ? (
             <Text style={globalStyles.form.errorText}>{formik.errors.password}</Text>
@@ -66,11 +76,7 @@ const Login = (props) => {
             <Button
                 mode='text'
                 style={globalStyles.form.buttonText}
-                labelStyle={{
-                    color: colors.secondary,
-                    textDecorationLine: 'underline',
-                    fontSize: 12,
-                }}
+                labelStyle={globalStyles.form.labelButton}
                 onPress={() => setIsLogin(false)}>
                 Registrate!
             </Button>
