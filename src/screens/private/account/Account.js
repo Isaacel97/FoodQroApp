@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import { ScrollView, Text } from 'react-native'
 import { Button, TextInput, Card } from 'react-native-paper'
 import { logoutUser } from '../../../api/authApi'
@@ -7,11 +7,46 @@ import { styles } from './Account.styles'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import colors from '../../../utils/styles/colors'
+import { getUser } from '../../../api/user'
 
 const Account = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [user, setUser] = useState({
+    email: '',
+    displayName: ''
+  })
+  const [loading, setLoading] = useState(false);
+
+  const setForm = () => {
+    formik.setValues({
+      email: user.email,
+      nombre: user.displayName
+    })
+  }
+
+  const dataUser = async () => {
+    try {
+      res = await getUser();
+      if (!res) throw ('No hay datos de usuario')
+      setUser(res)
+      console.log(res)
+    } catch (error) {
+      console.error(error)
+      alert(error)
+    }
+  }
+
+  useEffect(() => {
+    dataUser()
+  }, [])
+
+  useEffect(() => {
+    setForm()
+    setLoading(false)
+  }, [user]);
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -49,7 +84,7 @@ const Account = () => {
     },
   });
   
-  return (
+  return loading ? (<Text style={{marginTop: 50}} >Cargando...</Text>) : (
     <ScrollView style={{marginTop: 50}}>
         <Card style={styles.card} mode='outlined'>
           <Card.Content>
