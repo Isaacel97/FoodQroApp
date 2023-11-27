@@ -21,8 +21,8 @@ const Login = (props) => {
         password: Yup.string().required('El password es obligatorio'),
         }),
         onSubmit: async(formData) => {
-           const res = await validAuth(formData.email, formData.password, 'login');
-           console.log('RES LOGIN::: ',res.stsTokenManager.accessToken);
+            await validAuth(formData.email, formData.password, 'login');
+           //console.log('RES LOGIN::: ',res.stsTokenManager.accessToken);
         }
     })
   return (
@@ -31,6 +31,7 @@ const Login = (props) => {
             label='Email' 
             style={globalStyles.form.input}
             onChangeText={(text) => formik.setFieldValue('email', text)}
+            keyboardType='email-address'
             value={formik.values.email}
             error={formik.errors.email}
             left={

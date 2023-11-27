@@ -18,7 +18,7 @@ const TabNavigation = () => {
                 name={constants.SCREENS.HOME}
                 component={Home}
                 options={{ 
-                    title: 'Inicio',
+                    title: 'Restaurantes',
                     headerTransparent: true,
                 }}
             />
@@ -33,6 +33,10 @@ const TabNavigation = () => {
             <Tab.Screen 
                 name={constants.SCREENS.ACCOUNT} 
                 component={Account} 
+                options={{ 
+                    title: 'Cuenta',
+                    headerTransparent: true,
+                }}
             />
         </Tab.Navigator>
     )

@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { constants } from "../utils/constants/constants";
 
+// archivo sin usar
 const setToken = async (token) => {
     try {
         await AsyncStorage.setItem(constants.STORAGE.TOKEN, token);

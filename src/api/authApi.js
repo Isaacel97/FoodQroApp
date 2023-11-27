@@ -59,7 +59,7 @@ export const validAuth = async(email, pass, type) => {
 export const logoutUser = async() => {
     try {
         await signOut(auth);
-        callToast('Cierre de sesion correcto');
+        callToast('Cierre de sesion');
         return true;
     } catch (error) {
         const errorCode = error.code;

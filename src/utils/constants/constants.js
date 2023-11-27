@@ -8,6 +8,7 @@ export const constants = {
         HOME: 'Home',
         FAVORITES: 'Favorites',
         ACCOUNT: 'Account',
+        TABNAVIGATION: 'TabNavigation'
     },
     AUTH: {
         LOGIN: 'login',

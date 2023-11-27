@@ -6,6 +6,7 @@ import TabNavigation from './TabNavigaton/TabNavigation';
 import AwesomeIcon from "react-native-vector-icons/FontAwesome";
 import logo from '../../../../assets/img/logo_fqa.png'
 import colors from '../../../utils/styles/colors'
+import { constants } from '../../../utils/constants/constants'
 
 const AppNavigation = () => {
   const Stack = createNativeStackNavigator()
@@ -13,7 +14,7 @@ const AppNavigation = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen 
-        name='TabNavInicioigation' 
+        name={constants.SCREENS.TABNAVIGATION}
         component={TabNavigation}
         options={{ 
           title: '',
@@ -26,7 +27,6 @@ const AppNavigation = () => {
           headerRight: () => (
             <>
               <AwesomeIcon name='search' size={25} color='black' style={{marginHorizontal: 8}}/>
-              <AwesomeIcon name='heart' size={25} color={colors.primary} />
             </>
           ),
         }}
