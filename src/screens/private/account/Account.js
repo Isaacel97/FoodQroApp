@@ -7,7 +7,7 @@ import { styles } from './Account.styles'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import colors from '../../../utils/styles/colors'
-import { getUser } from '../../../api/user'
+import { getUser, updateUser, updatePasswordUser } from '../../../api/user'
 
 const Account = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
@@ -22,7 +22,7 @@ const Account = () => {
   const setForm = () => {
     formik.setValues({
       email: user.email,
-      nombre: user.displayName
+      displayName: user.displayName
     })
   }
 
@@ -34,7 +34,6 @@ const Account = () => {
       console.log(res)
     } catch (error) {
       console.error(error)
-      alert(error)
     }
   }
 
@@ -50,16 +49,27 @@ const Account = () => {
   const formik = useFormik({
     initialValues: {
       email: '',
-      nombre: '',
+      displayName: '',
     },
     validationSchema: Yup.object({
       email: Yup.string()
         .email('El email no es valido')
         .required('El email es obligatorio'),
-      nombre: Yup.string(),
+      displayName: Yup.string(),
     }),
     onSubmit: async(formData) => {
       console.log(formData);
+      setLoading(true)
+      try {
+        res = await updateUser(formData);
+        if (!res) throw ('No se pudo actualizar el usuario')
+        alert(res)
+        setLoading(false)
+      } catch (error) {
+        console.error(error)
+        alert(error)
+        setLoading(false)
+      }
     },
   });
 
@@ -81,6 +91,17 @@ const Account = () => {
     }),
     onSubmit: async(formData) => {
       console.log(formData);
+      setLoading(true)
+      try {
+        res = await updatePasswordUser(formData.password);
+        if (!res) throw ('No se pudo actualizar la contraseña')
+        alert(res)
+        setLoading(false)
+      } catch (error) {
+        console.error(error)
+        alert(error)
+        setLoading(false)
+      }
     },
   });
   
@@ -109,17 +130,17 @@ const Account = () => {
             <TextInput
               label="Nombre"
               style={styles.input}
-              onChangeText={formik.handleChange('nombre')}
-              value={formik.values.nombre}
-              error={formik.errors.nombre}
+              onChangeText={formik.handleChange('displayName')}
+              value={formik.values.displayName}
+              error={formik.errors.displayName}
               left={
                 <TextInput.Icon 
                   icon='account'
                   color='black'/>
               }
             />
-            {formik.errors.nombre && (
-                <Text style={globalStyles.form.errorText}>{formik.errors.nombre}</Text>
+            {formik.errors.displayName && (
+                <Text style={globalStyles.form.errorText}>{formik.errors.displayName}</Text>
             )}
             <Button 
                 mode='contained'
