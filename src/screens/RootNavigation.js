@@ -4,8 +4,7 @@ import AppNavigation from './private/AppNavigationTabs/AppNavigation';
 import { useAuth } from '../hooks/useAuth';
 
 const RootNavigation = () => {
-    console.log('RootNavigation.js');
-    const { user } = useAuth();
+  const { user } = useAuth();
   return user ? <AppNavigation/> : <AuthScreen />
 }
 

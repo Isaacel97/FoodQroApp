@@ -8,15 +8,15 @@ export const constants = {
         HOME: 'Home',
         FAVORITES: 'Favorites',
         ACCOUNT: 'Account',
-        TABNAVIGATION: 'TabNavigation'
+        TABNAVIGATION: 'TabNavigation',
+        RESTAURANTDETAIL: 'RestaurantDetail',
     },
     AUTH: {
         LOGIN: 'login',
         SIGNUP: 'signup',
     },
     FIREBASE: {
-        COLLECTIONS: {
-            USERS: 'users',
-        },
+        USERS: 'users',
+        RESTAURANTS: 'restaurants',
     },
 };

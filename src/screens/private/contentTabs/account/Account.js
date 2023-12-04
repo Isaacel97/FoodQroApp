@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { ScrollView, Text } from 'react-native'
 import { Button, TextInput, Card } from 'react-native-paper'
-import { logoutUser } from '../../../api/authApi'
-import { globalStyles } from '../../../utils/styles'
+import { logoutUser } from '../../../../api/authApi'
+import { getUser, updateUser, updatePasswordUser } from '../../../../api/user'
+import { globalStyles } from '../../../../utils/styles'
 import { styles } from './Account.styles'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import colors from '../../../utils/styles/colors'
-import { getUser, updateUser, updatePasswordUser } from '../../../api/user'
+import colors from '../../../../utils/styles/colors'
 
 const Account = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
@@ -31,7 +31,7 @@ const Account = () => {
       res = await getUser();
       if (!res) throw ('No hay datos de usuario')
       setUser(res)
-      console.log(res)
+      //console.log('data user: ', res)
     } catch (error) {
       console.error(error)
     }
@@ -58,7 +58,6 @@ const Account = () => {
       displayName: Yup.string(),
     }),
     onSubmit: async(formData) => {
-      console.log(formData);
       setLoading(true)
       try {
         res = await updateUser(formData);
@@ -90,7 +89,6 @@ const Account = () => {
         .oneOf([Yup.ref('password')], 'Las contraseñas no coinciden'),
     }),
     onSubmit: async(formData) => {
-      console.log(formData);
       setLoading(true)
       try {
         res = await updatePasswordUser(formData.password);

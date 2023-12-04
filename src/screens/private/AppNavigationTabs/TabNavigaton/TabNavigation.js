@@ -1,8 +1,8 @@
 import React from 'react'
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from '../../home/Home'
-import Favorites from '../../favorite/Favorites'
-import Account from '../../account/Account'
+import Home from '../../contentTabs/home/Home'
+import Favorites from '../../contentTabs/favorite/Favorites'
+import Account from '../../contentTabs/account/Account'
 import AwesomeIcon from "react-native-vector-icons/FontAwesome";
 import colors from '../../../../utils/styles/colors'
 import { constants } from '../../../../utils/constants/constants'

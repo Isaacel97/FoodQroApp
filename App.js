@@ -14,8 +14,8 @@ import colors from './src/utils/styles/colors';
 import RootNavigation from './src/screens/RootNavigation';
 
 export default function App() {
-  const environment = process.env.NODE_ENV
-  console.log(environment)
+  // const environment = process.env.NODE_ENV
+  // console.log('Modo', environment)
   const theme = {
     ...MD3LightTheme,
     colors: {
