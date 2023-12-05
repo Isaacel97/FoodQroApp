@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react'
-import { ScrollView, View, Image } from 'react-native'
+import { ScrollView, View, Image, Modal } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { Card, Text, Button, IconButton } from 'react-native-paper'
+import { Card, Text, Button, IconButton, TextInput } from 'react-native-paper'
 import { styles } from './RestaurantDetail.styles'
 import Loading from '../../../utils/Lotties/Loading'
 import { FIREBASE_API_KEY, URL_GOOGLE_PLACE_PHOTO, URL_GOOGLE_PLACE_DETAILS } from '@env'
@@ -16,15 +16,40 @@ const RestaurantDetail = () => {
     const [restaurant, setRestaurant] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isLiked, setIsLiked] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [comment, setComment] = useState('');
 
     const handleLikePress = async() => {
-        if (isLiked) {
-            await deleteFavorite(item.place_id);
-        } else {
-            await addFavorite(item.place_id);
+        setLoading(true);
+        try {
+            if (isLiked) {
+                await deleteFavorite(item.place_id);
+            } else {
+                await addFavorite(item.place_id);
+            }
+        } catch (error) {
+          console.error(error);  
+        } finally {
+            setLoading(false);
+            setIsLiked((prevIsLiked) => !prevIsLiked);
         }
-        setIsLiked((prevIsLiked) => !prevIsLiked);
     };
+
+    const handleCommentPress = () => {
+        setModalVisible(true);
+    };
+
+    const handleCancel = () => {
+        console.log('cancel');
+        setModalVisible(false);
+        setComment('');
+    };
+
+    const handleSend = () => {
+        console.log('Comentario:', comment);
+        setModalVisible(false);
+        setComment('');
+      };
 
     const getRestaurant = async () => {
         try {
@@ -98,7 +123,7 @@ const RestaurantDetail = () => {
 
         <Text style={styles.subtitle}>Comentarios: </Text>
         <View style={styles.container}>
-            <Button mode='contained' labelStyle={{ color: 'white' }} onPress={() => console.log('Comentar')}>
+            <Button mode='contained' labelStyle={{ color: 'white' }} onPress={handleCommentPress}>
                 Comentar
             </Button>
             
@@ -116,6 +141,38 @@ const RestaurantDetail = () => {
                 onPress={() => console.log('Pressed')}
             />
         </View>
+
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+            setModalVisible(false);
+            }}>
+             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10, width: '80%' }}>
+                    <TextInput
+                    multiline
+                    placeholder="Escribe tu comentario"
+                    value={comment}
+                    onChangeText={(text) => setComment(text)}
+                    style={{ borderWidth: 1, borderColor: 'black', padding: 8, marginBottom: 10 }}
+                    />
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Button 
+                            mode='text'
+                            onPress={() => handleCancel()}>
+                            Cancelar
+                        </Button>
+                        <Button 
+                            mode='text'
+                            onPress={() => handleSend()}>
+                            Enviar
+                        </Button>
+                    </View>
+                </View>
+            </View>
+        </Modal>
     </ScrollView>
   )
 }

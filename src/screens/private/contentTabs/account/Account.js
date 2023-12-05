@@ -31,7 +31,7 @@ const Account = () => {
       res = await getUser();
       if (!res) throw ('No hay datos de usuario')
       setUser(res)
-      //console.log('data user: ', res)
+      console.log('data user: ', res)
     } catch (error) {
       console.error(error)
     }

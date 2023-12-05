@@ -1,7 +1,7 @@
 import React from 'react'
 import { db } from './firebaseConfig'
 import { getUser } from './user'
-import { collection, setDoc, deleteDoc, deleteField, getDocs, getDoc, doc, updateDoc } from 'firebase/firestore';
+import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import { constants } from '../utils/constants/constants';
 import { callToast } from './commonFunctions';
 
