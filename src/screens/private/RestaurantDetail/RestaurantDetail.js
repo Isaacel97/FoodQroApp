@@ -7,7 +7,9 @@ import Loading from '../../../utils/Lotties/Loading'
 import { FIREBASE_API_KEY, URL_GOOGLE_PLACE_PHOTO, URL_GOOGLE_PLACE_DETAILS } from '@env'
 import AwesomeIcon from "react-native-vector-icons/FontAwesome";
 import colors from '../../../utils/styles/colors';
+import { callToast } from '../../../api/commonFunctions'
 const { getFavorite, addFavorite, deleteFavorite } = require('../../../api/favorites');
+const { addComment, getComments, setLikes, getLikes } = require('../../../api/restaurants');
 
 const RestaurantDetail = () => {
     const route = useRoute();
@@ -16,8 +18,13 @@ const RestaurantDetail = () => {
     const [restaurant, setRestaurant] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isLiked, setIsLiked] = useState(false);
+    const [meGusta, setMeGusta] = useState(false);
+    const [noMeGusta, setNoMeGusta] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [comment, setComment] = useState('');
+    const [comments, setComments] = useState();
+    const [likesNumber, setLikesNumber] = useState(0);
+    const [dislikesNumber, setDislikesNumber] = useState(0);
 
     const handleLikePress = async() => {
         setLoading(true);
@@ -45,8 +52,14 @@ const RestaurantDetail = () => {
         setComment('');
     };
 
-    const handleSend = () => {
+    const handleSend = async() => {
         console.log('Comentario:', comment);
+        if (!comment.trim()) {
+            callToast('El comentario es obligatorio');
+            return;
+        }
+        await addComment(item.place_id, comment);
+        await getCommentsRestaurant();
         setModalVisible(false);
         setComment('');
       };
@@ -65,6 +78,32 @@ const RestaurantDetail = () => {
         }
     }
 
+    const calification = async(type, action) => {
+        await setLikes(type, action, item.place_id);
+        await getLikesRestaurant();
+    }
+
+    const getCommentsRestaurant = async () => {
+        try {
+            const res = await getComments(item.place_id);
+            console.log('comentarios', res);
+            setComments(res);
+        } catch (error) {
+            console.error('error getComments:', error);
+        }
+    }
+
+    const getLikesRestaurant = async () => {
+        try {
+            const {likes, dislikes} = await getLikes(item.place_id);
+            console.log('likes', likes, 'dislikes', dislikes);
+            setLikesNumber(likes);
+            setDislikesNumber(dislikes);
+        } catch (error) {
+            console.error('error getLikes:', error);
+        }
+    }
+
     const isFavorite = async () => {
         const res = await getFavorite(item.place_id);
         console.log('res', res);
@@ -73,6 +112,8 @@ const RestaurantDetail = () => {
 
     useEffect(() => {
         getRestaurant();
+        getCommentsRestaurant();
+        getLikesRestaurant();
         isFavorite();
     }, [item])
 
@@ -122,23 +163,38 @@ const RestaurantDetail = () => {
         </Card>
 
         <Text style={styles.subtitle}>Comentarios: </Text>
+        {!comments || !comments.length ? (
+            <Text variant="bodyMedium">No hay comentarios</Text>
+            ) : (
+            comments.map((item, index) => (
+                <Card key={index} style={styles.card}>
+                <Card.Content>
+                    <Text variant="bodyMedium">Usuario: {item.usuario}</Text>
+                    <Text variant="bodyMedium">Comentario: {item.comentario}</Text>
+                </Card.Content>
+                </Card>
+            ))
+        )}
+
         <View style={styles.container}>
             <Button mode='contained' labelStyle={{ color: 'white' }} onPress={handleCommentPress}>
                 Comentar
             </Button>
             
+            <Text>{likesNumber}</Text>
             <IconButton
                 icon="thumb-up-outline"
                 color="black"
                 size={20}
-                onPress={() => console.log('Pressed')}
+                onPress={() => calification('likes', 'add')}
             />
 
+            <Text>{dislikesNumber}</Text>
             <IconButton
                 icon="thumb-down-outline"
                 color="black"
                 size={20}
-                onPress={() => console.log('Pressed')}
+                onPress={() => calification('dislikes', 'add')}
             />
         </View>
 

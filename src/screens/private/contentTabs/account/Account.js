@@ -150,7 +150,7 @@ const Account = () => {
           </Card.Content>
         </Card>
 
-        <Card style={styles.card} mode='outlined'>
+        {/* <Card style={styles.card} mode='outlined'>
           <Card.Title title="Password" />
           <Card.Content>
             <TextInput
@@ -224,7 +224,7 @@ const Account = () => {
                 Actualizar contraseña
             </Button>
           </Card.Content>
-        </Card>
+        </Card> */}
         <Button 
           mode='contained'
           style={globalStyles.form.buttonSubmit}

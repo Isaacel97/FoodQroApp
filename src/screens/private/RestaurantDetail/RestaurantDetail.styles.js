@@ -23,6 +23,7 @@ export const styles = StyleSheet.create({
         marginVertical: 12,
     },
     card: {
+        marginBottom: 10,
         backgroundColor: colors.greyLight,
         borderColor: 'black',
         borderWidth: 2,
@@ -32,5 +33,6 @@ export const styles = StyleSheet.create({
         justifyContent: 'space-between', // Puedes ajustar esto según tus necesidades
         marginHorizontal: 16, // Ajusta el espaciado lateral según tus necesidades
         marginTop: 20, 
+        marginBottom: 16
     },  
 });

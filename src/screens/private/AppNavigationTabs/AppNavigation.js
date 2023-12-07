@@ -25,14 +25,14 @@ const AppNavigation = () => {
               style={{ width: 50, height: 50 }}
             />
           ),
-          headerRight: () => (
-            <AwesomeIcon 
-            name='search' 
-            size={25} 
-            color='black' 
-            style={{marginHorizontal: 8}}
-            />
-          ),
+          // headerRight: () => (
+          //   <AwesomeIcon 
+          //   name='search' 
+          //   size={25} 
+          //   color='black' 
+          //   style={{marginHorizontal: 8}}
+          //   />
+          // ),
         }}
         />
         <Stack.Screen 

@@ -51,15 +51,17 @@ const Favorites = ({ navigation }) => {
   return loadingState ? (<Loading/> ) : (
     <ScrollView style={{marginTop: 50}}>
       <View style={{marginTop: 20}}>
-        {restaurants.map((item, index) => (
-          <Card key={index} style={styles.card} onPress={() => goToRestaurantDetail(item)}>
-            <Card.Cover source={{ uri: item.icon }} resizeMode="contain" />
-            <Card.Content>
-              <Title>{item.name}</Title>
-              <Paragraph>{item.vicinity}</Paragraph>
-            </Card.Content>
-          </Card>
-        ))}
+        {!restaurants || !restaurants.length ? <Title style={{textAlign: 'center'}}>No hay restaurantes favoritos</Title> : (
+          restaurants.map((item, index) => (
+            <Card key={index} style={styles.card} onPress={() => goToRestaurantDetail(item)}>
+              <Card.Cover source={{ uri: item.icon }} resizeMode="contain" />
+              <Card.Content>
+                <Title>{item.name}</Title>
+                <Paragraph>{item.vicinity}</Paragraph>
+              </Card.Content>
+            </Card>
+          ))
+        )}
       </View>
     </ScrollView>
   )

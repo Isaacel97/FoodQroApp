@@ -1,24 +1,27 @@
 import React from 'react'
 import { db } from './firebaseConfig'
 import { getUser } from './user'
-import { getDoc, doc, updateDoc } from 'firebase/firestore';
+import { getDoc, doc, setDoc } from 'firebase/firestore';
 import { constants } from '../utils/constants/constants';
 import { callToast } from './commonFunctions';
 
 export const addFavorite = async (restaurant) => {
+    let message;
     try {
         const user = await getUser();
         const userRef = doc(db, constants.FIREBASE.USERS, user.uid);
         const userDoc = await getDoc(userRef);
         const currentFavorites = userDoc.exists() ? userDoc.data().favoritos || {} : {};
         currentFavorites[restaurant] = true;
-        await updateDoc(userRef, { 
-            favoritos: currentFavorites 
-        });
-        callToast('Agregado a favoritos');
+        await setDoc(userRef, {
+            favoritos: currentFavorites
+        }, { merge: true });
+        message = 'Agregado a favoritos';
     } catch (e) {
         console.error('Error adding document: ', e);
-        callToast('Error al agregar a favoritos');
+        message = 'Error al agregar a favoritos';
+    } finally {
+        callToast(message);
     }
 }
 
@@ -36,6 +39,22 @@ export const getFavorites = async () => {
     } catch (e) {
         console.error('Error adding document: ', e);
         return false;
+    }
+}
+
+export const getLikeUser = async () => {
+    try {
+        const user = await getUser();
+        const docRef = doc(db, constants.FIREBASE.USERS, user.uid );
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            const currentLikes = docSnap.data().likes || {};
+            const currentDislikes = docSnap.data().dislikes || {};
+            
+        }
+
+    } catch (e) {
+        console.error('Error adding document: ', e);
     }
 }
 
@@ -67,7 +86,7 @@ export const deleteFavorite = async (restaurant) => {
         if (userDoc.exists()) {
             const currentFavorites = userDoc.data().favoritos || {};
             delete currentFavorites[restaurant];
-            await updateDoc(userRef, { 
+            await setDoc(userRef, { 
                 favoritos: currentFavorites 
             });
             callToast('Eliminado de favoritos');
